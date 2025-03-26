@@ -1,16 +1,15 @@
 <template>
   <div>
-    <router-view></router-view>  <!-- ✅ 确保这里有 router-view -->
+    <router-view></router-view>
+    <!-- ✅ 确保这里有 router-view -->
   </div>
 </template>
 
 <script>
-
 export default {
-  name: 'App',
-  components: {
-  }
-}
+  name: "App",
+  components: {},
+};
 </script>
 
 <style>
