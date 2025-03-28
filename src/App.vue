@@ -1,14 +1,12 @@
 <template>
-  <div>
-    <router-view></router-view>
-    <!-- ✅ 确保这里有 router-view -->
-  </div>
+  <LayoutMain />
 </template>
 
 <script>
+import LayoutMain from "./layout/LayoutMain.vue";
 export default {
   name: "App",
-  components: {},
+  components: { LayoutMain },
 };
 </script>
 
@@ -19,6 +17,5 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>

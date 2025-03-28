@@ -1,66 +1,76 @@
 <template>
-    <div>
-        <el-button type="primary" @click="openDialog()">添加卷</el-button>
-        <el-table :data="scrolls" border>
-            <el-table-column prop="scrollId" label="ID" width="50" />
-            <el-table-column prop="scrollName" label="卷名">
-                <template #default="{ row }">
-                    <el-link type="primary" @click="goToScrollDetail(row.scrollId)">{{ row.scrollName }}</el-link>
-                </template>
-            </el-table-column>
-            <el-table-column prop="author" label="作者" />
-            <el-table-column prop="category" label="分类" />
-            <el-table-column prop="rating" label="评分" width="80" />
-            <el-table-column prop="viewCount" label="浏览量" width="80" />
-            <el-table-column label="封面" width="100">
-                <template #default="{ row }">
-                    <el-image v-if="row.coverUrl" :src="getCoverUrl(row.coverUrl)" style="width: 50px; height: 50px;"
-                        fit="cover" />
-                </template>
-            </el-table-column>
-            <el-table-column label="操作" width="180">
-                <template #default="{ row }">
-                    <el-button type="primary" size="small" @click="openDialog(row)">编辑</el-button>
-                    <el-button type="danger" size="small" @click="deleteScroll(row.scrollId)">删除</el-button>
-                </template>
-            </el-table-column>
-        </el-table>
+    <div class="container">
+        <div class="button-view">
+            <el-button type="primary" class="transparent-button" @click="openDialog"
+                style="display: flex; align-items: center;">
+                <el-icon style="margin-right: 1px;"> <!-- 给图标添加右边距 -->
+                    <Plus />
+                </el-icon>
+                <span style="margin-top: 2px;">新增</span> <!-- 调整文本位置 -->
+            </el-button>
+        </div>
+        <div class="form-view">
+            <el-table :data="scrolls" border>
+                <el-table-column prop="scrollId" label="ID" width="50" />
+                <el-table-column prop="scrollName" label="卷名">
+                    <template #default="{ row }">
+                        <el-link type="primary" @click="goToScrollDetail(row.scrollId)">{{ row.scrollName }}</el-link>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="author" label="作者" />
+                <el-table-column prop="category" label="分类" />
+                <el-table-column prop="rating" label="评分" width="80" />
+                <el-table-column prop="viewCount" label="浏览量" width="80" />
+                <el-table-column label="封面" width="100">
+                    <template #default="{ row }">
+                        <el-image v-if="row.coverUrl" :src="getCoverUrl(row.coverUrl)"
+                            style="width: 50px; height: 50px;" fit="cover" />
+                    </template>
+                </el-table-column>
+                <el-table-column label="操作" width="180">
+                    <template #default="{ row }">
+                        <el-button type="primary" size="small" @click="openDialog(row)">编辑</el-button>
+                        <el-button type="danger" size="small" @click="deleteScroll(row.scrollId)">删除</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
 
-        <el-dialog v-model="dialogVisible" title="编辑卷" width="500px">
-            <el-form :model="currentScroll" label-width="80px">
-                <el-form-item label="卷名">
-                    <el-input v-model="currentScroll.scrollName" placeholder="请输入卷名" />
-                </el-form-item>
-                <el-form-item label="作者">
-                    <el-input v-model="currentScroll.author" placeholder="请输入作者" />
-                </el-form-item>
-                <el-form-item label="封面">
-                    <el-upload class="avatar-uploader" :show-file-list="false" :auto-upload="false"
-                        :before-upload="beforeUpload" :on-change="handleFileChange">
-                        <el-image v-if="currentScroll.coverUrl" :src="currentScroll.coverUrl"
-                            style="width: 100px; height: 100px;" fit="cover" />
-                        <el-button v-else type="primary">选择封面</el-button>
-                    </el-upload>
-                </el-form-item>
-                <el-form-item label="分类">
-                    <el-input v-model="currentScroll.category" placeholder="请输入分类" />
-                </el-form-item>
-                <el-form-item label="评分">
-                    <el-input-number v-model="currentScroll.rating" :min="0" :max="10" :step="0.1" />
-                </el-form-item>
-                <el-form-item label="状态">
-                    <el-select v-model="currentScroll.status">
-                        <el-option label="下架" :value="0" />
-                        <el-option label="上架" :value="1" />
-                        <el-option label="审核中" :value="2" />
-                    </el-select>
-                </el-form-item>
-            </el-form>
-            <div style="text-align: right;">
-                <el-button @click="dialogVisible = false">取消</el-button>
-                <el-button type="primary" @click="saveScroll()">保存</el-button>
-            </div>
-        </el-dialog>
+            <el-dialog v-model="dialogVisible" title="编辑卷" width="500px">
+                <el-form :model="currentScroll" label-width="80px">
+                    <el-form-item label="卷名">
+                        <el-input v-model="currentScroll.scrollName" placeholder="请输入卷名" />
+                    </el-form-item>
+                    <el-form-item label="作者">
+                        <el-input v-model="currentScroll.author" placeholder="请输入作者" />
+                    </el-form-item>
+                    <el-form-item label="封面">
+                        <el-upload class="avatar-uploader" :show-file-list="false" :auto-upload="false"
+                            :before-upload="beforeUpload" :on-change="handleFileChange">
+                            <el-image v-if="currentScroll.coverUrl" :src="currentScroll.coverUrl"
+                                style="width: 100px; height: 100px;" fit="cover" />
+                            <el-button v-else type="primary">选择封面</el-button>
+                        </el-upload>
+                    </el-form-item>
+                    <el-form-item label="分类">
+                        <el-input v-model="currentScroll.category" placeholder="请输入分类" />
+                    </el-form-item>
+                    <el-form-item label="评分">
+                        <el-input-number v-model="currentScroll.rating" :min="0" :max="10" :step="0.1" />
+                    </el-form-item>
+                    <el-form-item label="状态">
+                        <el-select v-model="currentScroll.status">
+                            <el-option label="下架" :value="0" />
+                            <el-option label="上架" :value="1" />
+                            <el-option label="审核中" :value="2" />
+                        </el-select>
+                    </el-form-item>
+                </el-form>
+                <div style="text-align: right;">
+                    <el-button @click="dialogVisible = false">取消</el-button>
+                    <el-button type="primary" @click="saveScroll()">保存</el-button>
+                </div>
+            </el-dialog>
+        </div>
     </div>
 </template>
 
@@ -69,10 +79,13 @@ import axios from 'axios';
 import { ref, onMounted } from 'vue';
 import { ElMessage } from 'element-plus';
 import { useRoute, useRouter } from 'vue-router';
-
+import { Plus } from '@element-plus/icons-vue'
 const BASE_URL = process.env.VUE_APP_API_BASE_URL;
 
 export default {
+    components: {
+        Plus
+    },
     setup() {
         const router = useRouter();
         const route = useRoute();
@@ -188,3 +201,9 @@ export default {
     }
 };
 </script>
+<style scoped>
+.container {
+    display: flex;
+    flex-direction: column;
+}
+</style>
